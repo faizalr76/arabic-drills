@@ -3,7 +3,7 @@
     <style>
         .button {
             font-family: Consolas, Courier New;
-            width: 20%;
+            width: 100%;
             font-size: 20pt;
             disabled: true
         }
@@ -21,38 +21,60 @@
         }
     </style>
 
-    <table align="center" border=1 width="100%">
-        <tr><td colspan=1 id="content" class="content"></td></tr>
+    <table align="center" border=0 width="100%">
         <tr>
-            <td>
+          <td colspan=3 id="content" class="content">
+            <!-- content area -->
+          </td>
+        </tr>
+        <tr>
+          <td colspan=3>
                 <input id="start_button" class="button" style="width: 100%" type="button" value="start" onclick="run(this)"></input>
             </td>
         </tr>
         <tr>
-            <td style="width:100%">
-                <nobr>
+            <td>
                 <input id="button" class="button" type="button" value="faajirun"     onclick="check_answer(this)"></input>
+            </td>
+            <td>
                 <input id="button" class="button" type="button" value="mufajjirun"   onclick="check_answer(this)"></input>
+            </td>
+            <td>
                 <input id="button" class="button" type="button" value="mufaajirun"   onclick="check_answer(this)"></input>
-                </nobr>
             </td>
         </tr>
         <tr>
-            <td><nobr>
+            <td>
                 <input id="button" class="button" type="button" value="mufjirun"     onclick="check_answer(this)"></input>
+            </td>
+            <td>
                 <input id="button" class="button" type="button" value="mutafajjirun" onclick="check_answer(this)"></input>
+            </td>
+            <td>
                 <input id="button" class="button" type="button" value="mutafaajirun" onclick="check_answer(this)"></input>
-            </nobr></td>
+            </td>
         </tr>
         <tr>
-            <td><nobr>
+            <td>
                 <input id="button" class="button" type="button" value="munfajirun"   onclick="check_answer(this)"></input>
+            </td>
+            <td>
                 <input id="button" class="button" type="button" value="muftajirun"   onclick="check_answer(this)"></input>
+            </td>
+            <td>
                 <input id="button" class="button" type="button" value="mufjarrun"    onclick="check_answer(this)"></input>
-                <input id="button" class="button" type="button" value="mustafjirun"  onclick="check_answer(this)"></input>
-            </nobr></td>
+            </td>
         </tr>
-        <tr><td colspan=1 id="log" class="content"></td></tr>
+        <tr>
+            <td colspan=3>
+                <input id="button" class="button" type="button" value="mustafjirun"  onclick="check_answer(this)"></input>
+            </td>
+        </tr>
+        <tr>
+          <td colspan=3 id="log" class="content">
+
+          </td>
+        </tr>
     </table>
 
     <script>
