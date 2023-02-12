@@ -1,0 +1,100 @@
+<html>
+  <body>
+    <style>
+        .button {
+            font-family: Consolas, Courier New;
+            width: 100%;
+            font-size: 20pt
+        }
+        .content {
+            font-family: Consolas, Courier New;
+            font-size: 30pt;
+            text-align: center;
+            padding: 30px;
+        }
+        #log {
+            font-family: Consolas, Courier New;
+            font-size: 20pt;
+            text-align: center;
+            padding: 30px;
+        }
+    </style>
+
+    <table align="center" border=0 width="50%">
+      <tr>
+        <td><input width="100%" id="button" class="button" type="button" value="start" onclick="run()"></input></td>
+      </tr>
+        <tr><td colspan=1 id="content" class="content"></td></tr>
+        <tr><td colspan=1 id="log" class="content"></td></tr>
+    </table>
+
+    <script>
+        const start_btn = document.getElementById("button");
+        const content = document.getElementById("content");
+        const log = document.getElementById("log");
+
+        let ori_ques = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+        let history = [];
+        let ques, start_time;
+
+        function random_elem (arr) {
+            const i = Math.floor(Math.random() * arr.length);
+            const ret = arr.splice(i, 1);
+            return ret;
+        }
+
+        function init () {
+            ques = ori_ques.slice(0);
+            start_btn.value = "start";
+            start_btn.disabled = false;
+            content.innerHTML = "---";
+        }
+
+        function entry (name, elapsed) {
+            return {
+                name,
+                elapsed,
+                toString: () => `${name}: ${elapsed}`
+            };
+        }
+
+        function cmp_entry (a, b) {
+            if (a.elapsed > b.elapsed) return  1; else
+            if (a.elapsed < b.elapsed) return -1; else
+            return 0;
+        }
+
+        function run () {
+            if (ques.length === ori_ques.length) {
+                start_time = new Date();
+                content.innerHTML = random_elem(ques);
+                start_btn.value = "next";
+            }
+            else if (ques.length > 0) {
+                content.innerHTML = random_elem(ques);
+            }
+            else if (ques.length === 0) {
+                // out of questions
+                let elapsed = (new Date() - start_time) / 1000;
+
+                // disable button and clear content area
+                start_btn.disabled = true;
+                content.innerHTML = "---";
+
+                // update history with name and elapsed time
+                let name = prompt("Enter name");
+                history.push(entry(name, elapsed));
+                history.sort(cmp_entry);
+                log.innerHTML = history.join("<br>");
+
+                init();
+            }
+            else {
+                throw "Should not reach here.";
+            } 
+        }
+
+        init();
+    </script>
+  </body>
+</html>

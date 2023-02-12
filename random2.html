@@ -1,0 +1,157 @@
+<html>
+  <body>
+    <style>
+        .button {
+            font-family: Consolas, Courier New;
+            width: 20%;
+            font-size: 20pt;
+            disabled: true
+        }
+        .content {
+            font-family: Consolas, Courier New;
+            font-size: 30pt;
+            text-align: center;
+            padding: 30px;
+        }
+        #log {
+            font-family: Consolas, Courier New;
+            font-size: 20pt;
+            text-align: center;
+            padding: 30px;
+        }
+    </style>
+
+    <table align="center" border=1 width="100%">
+        <tr><td colspan=1 id="content" class="content"></td></tr>
+        <tr>
+            <td>
+                <input id="start_button" class="button" style="width: 100%" type="button" value="start" onclick="run(this)"></input>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100%">
+                <nobr>
+                <input id="button" class="button" type="button" value="faajirun"     onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="mufajjirun"   onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="mufaajirun"   onclick="check_answer(this)"></input>
+                </nobr>
+            </td>
+        </tr>
+        <tr>
+            <td><nobr>
+                <input id="button" class="button" type="button" value="mufjirun"     onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="mutafajjirun" onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="mutafaajirun" onclick="check_answer(this)"></input>
+            </nobr></td>
+        </tr>
+        <tr>
+            <td><nobr>
+                <input id="button" class="button" type="button" value="munfajirun"   onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="muftajirun"   onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="mufjarrun"    onclick="check_answer(this)"></input>
+                <input id="button" class="button" type="button" value="mustafjirun"  onclick="check_answer(this)"></input>
+            </nobr></td>
+        </tr>
+        <tr><td colspan=1 id="log" class="content"></td></tr>
+    </table>
+
+    <script>
+        const start_btn = document.getElementById("start_button");
+        const content = document.getElementById("content");
+        const log = document.getElementById("log");
+
+        //let ori_ques = ["fa''ala", "faa'ala", "af'ala", "tafa''ala", "tafaa'ala", "infa'ala", "ifta'ala", "if'alla", "istaf'ala"];
+        let ori_ques = [
+            {que: "fajara", ans: "faajirun"}, {que: "fajjara", ans: "mufajjirun"}, {que: "faajara", ans: "mufaajirun"}, {que: "afjara", ans: "mufjirun"}, {que: "tafajjara", ans: "mutafajjirun"},
+            {que: "tafaajara", ans: "mutafaajirun"}, {que: "infajara", ans: "munfajirun"}, {que: "iftajara", ans: "muftajirun"}, {que: "ifjarra", ans: "mufjarrun"}, {que: "istafjara", ans: "mustafjirun"}
+        ];
+        let g = {que: null}
+        let history = [entry("fz", 22.893)];
+        let ques, start_time;
+        let first_question_p, after_first_question_p, after_last_question_p;
+        
+        function random_elem (arr) {
+            const i = Math.floor(Math.random() * arr.length);
+            const ret = arr.splice(i, 1);
+            return ret[0];
+        }
+
+        function init () {
+            first_question_p = true;
+            ques = ori_ques.slice(0);
+            start_btn.value = "start";
+            start_btn.disabled = false;
+            let buttons = document.getElementsByTagName("input");
+            for (button of buttons)
+                button.disabled = false;
+            content.innerHTML = "---";
+            log.innerHTML = history.join("<br>");
+        }
+
+        function entry (name, elapsed) {
+            return {
+                name,
+                elapsed,
+                toString: () => `${name}: ${elapsed}`
+            };
+        }
+
+        function cmp_entry (a, b) {
+            if (a.elapsed > b.elapsed) return  1; else
+            if (a.elapsed < b.elapsed) return -1; else
+            return 0;
+        }
+
+        function check_answer (btn) {
+            if (btn.value === g.que.ans) {
+                btn.disabled = true;
+                run();
+                //show_next_que();
+            }
+            else {
+                console.log(`Wrong answer ! ${g.que.que}`);
+            }
+        }
+
+        function run (ref) {
+            if (first_question_p) {
+                first_question_p = false;
+                after_first_question_p = true;
+                start_time = new Date();
+                start_btn.disabled = true;
+                g.que = random_elem(ques);
+                content.innerHTML = "(" + ques.length + ") " + g.que.que;
+            }
+            else if (after_first_question_p) {
+                g.que = random_elem(ques);
+                content.innerHTML = "(" + ques.length + ") " + g.que.que;
+                if (ques.length === 0) {
+                    after_first_question_p = false;
+                    after_last_question_p = true;
+                }
+            }
+            else if (after_last_question_p) {
+                // out of questions
+                let elapsed = (new Date() - start_time) / 1000;
+
+                // disable button and clear content area
+                start_btn.disabled = true;
+                content.innerHTML = "---";
+
+                // update history with name and elapsed time
+                let name = prompt("Enter name");
+                history.push(entry(name, elapsed));
+                history.sort(cmp_entry);
+                log.innerHTML = history.join("<br>");
+
+                init();
+            }
+            else {
+                throw "Should not reach here.";
+            }
+        }
+
+        init();
+    </script>
+  </body>
+</html>
